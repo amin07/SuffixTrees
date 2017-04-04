@@ -1,7 +1,21 @@
-#include <iostream>
+#include "Suffix.h"
 
-using namespace std;
+
+TN buildTree(string str){
+	TN *root = new TN();
+	root->addChild(new TN(0,str));	// adding full suffix
+
+	for(int i=1;i<str.size();i++){
+
+	}
+
+	return root;
+}
+
 int main(){
-	cout<<"hello world"<<endl;
+	string str = "hello world here";
+	str.append("#");
+
+	cout<<str<<endl;
 	return 0;
 }
