@@ -4,7 +4,7 @@ clean:
 	rm Suffix.o Suffix.exe
   
 Suffix.exe: Suffix.o
-	g++ -g -o Suffix.exe Suffix.o
+	g++ -std=c++11 -g -o Suffix.exe Suffix.o
   
 Suffix.o: Suffix.cpp
-	g++ -c -g Suffix.cpp
+	g++ -std=c++11 -c -g Suffix.cpp
