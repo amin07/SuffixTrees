@@ -63,14 +63,42 @@ TN * buildTree(string str){
 
 	return root;
 }
+/*
+ * Recursive function to calculate left diverse nodes in a suffix tree
+ * params:
+ * nd : root node of the suffix tree
+ * str : string for which nd is a suffix tree
+ * */
+bool calculateLeftDiverse(TN *nd, string &str){
 
+	if(nd->nodeMark>=0){
+		if(nd->nodeMark>0)
+			nd->leftChar = str[nd->nodeMark-1];
+		return false;
+	}
+	else{
+		for(auto n:nd->childs){
+			nd->leftDiverse = calculateLeftDiverse(n, str) || nd->leftDiverse;
+		}
+	}
+
+	if(nd->leftDiverse) return true;
+
+	char firstLeftChar = nd->childs[0]->leftChar;
+	for(int i=1;i<nd->childs.size();i++){
+		if(firstLeftChar!=nd->childs[i]->leftChar) {nd->leftDiverse=true; return true;}
+	}
+	nd->leftChar = firstLeftChar;
+	return false;
+}
 
 void printSuffixes(TN *nd, string runString){
 	if(nd->nodeMark>=0){
-		cout<<runString<<" "<<nd->nodeMark<<endl;
+		//cout<<runString<<" "<<nd->nodeMark<<endl;
 	}
 	for(auto n : nd->childs){
-		//cout<<"This is an edge label: "<<n->edge_label<<endl;
+		if(n->leftDiverse && n->nodeMark<0 && n->edge_label.compare(""))
+			cout<<"Maximal repeats: "<<runString+n->edge_label<<endl;
 		printSuffixes(n, runString+n->edge_label);
 	}
 
@@ -78,10 +106,11 @@ void printSuffixes(TN *nd, string runString){
 
 
 int main(){
-	string str = "axybxyc";
+	string str = "aabcaabdaabcabyabz";
 	str.append("#");
 
 	TN *tree = buildTree(str);
+	calculateLeftDiverse(tree, str);
 	printSuffixes(tree, "");
 
 
